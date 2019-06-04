@@ -19,7 +19,6 @@ int main(int argc, char** argv){
 	double pi, global_result = 0, local_result;
 	double time_elapsed, t_start, t_finish, worst_time;
 
-	MPI_Status status;
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &np);
@@ -37,7 +36,6 @@ int main(int argc, char** argv){
 		helper[1] = helper[0] + quotient;
 	}
 	
-	//printf("sono il processo %d, eseguo da %d a %d\n", my_rank, helper[0], helper[1]);
 
 	local_result = trapezio(helper[0], helper[1]);
 
