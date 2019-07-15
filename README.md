@@ -141,16 +141,21 @@ La gestione del tempo di esecuzione è stata effettuata come nella precedente so
 #
 
 ### Strong scaling regola del Trapezio
+![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingTrapezio_plot.png)
+
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:--------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-----:|:-------:|
 | Time | 0.002965 | 0.02474 | 0.02052 | 0.01773 | 0.01643 | 0.01566 | 0.015 | 0.01497 |
 #
 ### Strong scaling metodo di Monte Carlo
+![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingMonteCarlo_plot.png)
+
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | Time | 0.31928 | 0.18108 | 0.12788 | 0.11651 | 0.08161 | 0.07487 | 0.06718 | 0.06509 |
 #
 ### Weak scaling metodo di Monte Carlo
+![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/weakScalingMonteCarlo.png)
 #### 2000 iter/proc
 | Iterations | 4000 | 6000 | 8000 | 10000 | 12000 | 14000 | 16000 | 18000 | 20000 | 22000 | 24000 | 26000 | 28000 | 30000 | 32000 |
 |:----------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:------:|
