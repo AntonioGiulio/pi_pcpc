@@ -22,16 +22,16 @@ Ho cercato di parallelizzare il più possibile, infatti non è il processo MASTE
 Analizziamo nel dettaglio la soluzione proposta per il metodo del Trapezio.
 
 Per prima cosa si inizializza MPI
-'''c
+```c
  int np; //numero totale di processori
  int my_rank; //rank del processore corrente
  
  MPI_Init(&argc, &argv);
  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
  MPI_Comm_size(MPI_COMM_WORLD, &np);
-'''
+```
 Ogni processo deve applicare il metodo del trapezio su un intervallo specifico compreso tra 0 e 1E7, quindi deve calcolare gli estremi del proprio intervallo in funzione di my_rank e reminder:
-'''c
+```c
  int quotient, reminder;
  int helper[2];
  
@@ -45,7 +45,7 @@ Ogni processo deve applicare il metodo del trapezio su un intervallo specifico c
     helper[0] = (quotient * my_rank) + reminder;
     helper[1] = helper[0] + quotient;
  }
-'''
+ ```
 
 
 ### Metodo Monte Carlo
