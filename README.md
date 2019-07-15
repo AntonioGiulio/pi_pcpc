@@ -30,7 +30,7 @@ Per prima cosa si inizializza MPI
  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
  MPI_Comm_size(MPI_COMM_WORLD, &np);
 ```
-Ogni processo deve applicare il metodo del trapezio su un intervallo specifico compreso tra 0 e 1E7, quindi deve calcolare gli estremi del proprio intervallo in funzione di my_rank e reminder:
+Ogni processo deve applicare la regola del trapezio su un intervallo specifico compreso tra 0 e 1E7, quindi deve calcolare gli estremi del proprio intervallo in funzione di my_rank e reminder:
 ```c
  int quotient, reminder;
  int helper[2];
