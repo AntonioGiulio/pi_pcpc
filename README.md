@@ -46,6 +46,36 @@ Ogni processo deve applicare il metodo del trapezio su un intervallo specifico c
     helper[1] = helper[0] + quotient;
  }
  ```
-
-
+Successivamente ogni processo invoca la funzione trapezio passando come parametri gli estremi dell'intervallo precedentemente calcolati e salva il risultato e salva il risultato nella variabile local_result:
+ 
+ ```c
+ double trapezio(int start, int finish){
+    double x2, result = 0.0;
+    for(; start < finish; start++){
+        x2 = d2 * start * start;
+        result += 1.0 / (1.0 + x2);
+    }
+    return result;
+ }
+ ```
+ ```c
+   local_result = trapezio(helper[0], helper[1];
+ ```
+Dopo aver ottenuto il local result ogni processo lo invia al MASTER tramite la funzione MPI_Reduce fornita da MPI. 
+Ho scelto di utilizzare questa funzione perchè specificando un parametro (in questo caso MPI_SUM) ci consente di sommare automaticamente tutte le variabili local_result evitando ulteriore calcolo al processo MASTER.
+```c
+  MPI_Reduce(&local_result, &global_result, 1, MPI_Double, MPI_SUM, MASTER, MPI_COMM_WORLD);
+```
+Infine il processo MASTER si occupa di ultimare l'approssimazione del π e stampa i risultati.
+```c
+  if(my_rank == MASTER){
+      pi = 4 * d * global_result;
+      printf("il valore di pi: %lf\n", pi);
+  }
+```
+Per quanto riguarda la gestione del tempo in entrabe le soluzioni ogni processo calcola quanto tempo intercorre tra l'inizio della computazione e il calcolo del local_resul. Infine tutti inviano il proprio time_elapsed al processo MASTER utilizzando MPI_Reduce che stamperà il tempo di esecuzione peggiore.
+```c
+MPI_Reduce(&time_elapsed, &worst_time, 1, MPI_DOUBLE, MPI_MAX, MASTER, MPI_COMM_WORLD);
+```
+#
 ### Metodo Monte Carlo
