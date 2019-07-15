@@ -141,6 +141,6 @@ La gestione del tempo di esecuzione è stata effettuata come nella precedente so
 #
 
 ### Strong scaling regola del Trapezio
-Np | Time
---- | ---
-2 | 0.02965
+Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
+--- | --- | --- | --- | --- | --- | --- | --- |
+Time | 0.02965 | 0.02474 | 0.02052 | 0.01773 | 0.01643 | 0.01566 | 0.015 | 0.01497|
