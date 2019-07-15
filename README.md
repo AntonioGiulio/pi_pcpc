@@ -19,7 +19,7 @@ Per entrambi gli algoritmi, lo scopo è quello di parallelizzare il processo di 
 Ho cercato di parallelizzare il più possibile, infatti non è il processo MASTER a preoccuparsi di distribuire le porzioni di input agli altri processi, bensì ognuno ha i mezzi necessari per calcolare autonomamente la porzione di input da processare.
 #
 ### Regola del trapezio
-Analizziamo nel dettaglio la soluzione proposta per il metodo del Trapezio.
+Analizziamo nel dettaglio la soluzione proposta per la regola del Trapezio.
 
 Per prima cosa si inizializza MPI
 ```c
@@ -79,3 +79,62 @@ MPI_Reduce(&time_elapsed, &worst_time, 1, MPI_DOUBLE, MPI_MAX, MASTER, MPI_COMM_
 ```
 #
 ### Metodo Monte Carlo
+Analizziamo nel dettaglio la soluzione proposta per il metodo di Monte Carlo.
+
+Per prima cosa si inizializza MPI
+```c
+ int np; //numero totale di processori
+ int my_rank; //rank del processore corrente
+ 
+ MPI_Init(&argc, &argv);
+ MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+ MPI_Comm_size(MPI_COMM_WORLD, &np);
+```
+Ogni processo invoca la funzione get_input che tramite la collective communication di MPI, in particolare tramite la funzione MPI_Bcast, invia a tutti il valore n_iter passato da riga di comando che rappresenta il numero di iterazioni totali per l'approssimazione del π.
+```c
+  void get_input(int argc, char** argv, int my_rank, long* n_iter){
+      ...
+      MPI_Bcast(n_iter, 1, MPI_LONG, MASTER, MPI_COMM_WORLD);
+      ...
+  }
+```
+```c
+  get_input(argc, argv, my_rank, &n_iter);
+```
+Successivamente ogni processo calcola il numero di iterazioni che deve effettuare gestendo il resto della divisione tra (n_iter / np).
+```c
+  quotient = n_iter / np;
+  reminder = n_iter % np;
+  n_proc_iter = (my_rank < reminder) ? (quotient + 1) : quotient;
+```
+Non ci resta che ottenere il numero dei punti utili all'approssimazione del π invocando la funzione monte_carlo che implementa l'algoritmo.
+```c
+long monte_carlo(long local_iter){
+    long i, count = 0;
+    double x, y;
+    srand((unsigned int) time(0));
+    for(i = 0; i < local_iter; i++){
+        x = (double) rand() / RAND_MAX;
+        y = (double) rand() / RAND_MAX;
+        if((x * x + y * y) <= 1)
+            count ++
+    }
+    return count;
+}
+```
+```c
+  proc_count = monte_carlo(n_proc_iter);
+```
+In seguito tramite la funzione MPI_Reduce, specificando il parametro MPI_SUM, ogni processo invia al MASTER il risultato ottenuto (proc_count) che verrà sommato nella variabile global_count.
+```c
+  MPI_Reduce(&proc_count, &global_count, 1, MPI_LONG, MPI_SUM, MASTER, MPI_COMM_WORLD);
+```
+Infine il processo MASTER completa l'approssimazione e stampa i risultati:
+```c
+  if(my_rank == MASTER){
+    pi = (double) global_count / n_iter * 4;
+    ...
+    printf("Number of point = %ld, pi = %g\n", n_iter, pi);
+  }
+```
+La gestione del tempo di esecuzione è stata effettuata come nella precedente soluzione.
