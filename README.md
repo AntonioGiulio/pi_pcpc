@@ -139,13 +139,22 @@ Infine il processo MASTER completa l'approssimazione e stampa i risultati:
 ```
 La gestione del tempo di esecuzione è stata effettuata come nella precedente soluzione.
 #
-
+### Confronto delle soluzioni 
+Analizzando i risultati dei test dei due programmi eseguiti in parallelo sul cluster di Amazon possiamo dedurre che l'approssimazione del π è più precisa con la regola del Trapezio che con il metodo di Monte Carlo. Questo succede perchè con il metodo di Monte Carlo andiamo a dividere il numero di iteraizoni totali tra i processori e utilizziamo dei numeri pseudocasuali, nonostante non sia stato utilizzato un seme fisso per la loro generazione, il risultato è meno preciso all'aumentare dei processori coinvolti ripetto al metodo del Trapezio. Infatti utilizzando la regola del trapezio, indipendentemente dal numero dei processori, il valore di π è sempre pari a 3,141593.
+### Testing 
+I test sono stati effettuati sulle istanze m4.large (2 core) di Amazon Web Services. E' stata testata sia lo Strong Scaling che il Weak Scaling.
+#### Risorse utilizzate:
+  - 8 istanze EC2 m4.large
+  - 16 processori ( 2 core per istanza )
 ### Strong scaling regola del Trapezio
 ![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingTrapezio_plot.png)
 
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:--------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-----:|:-------:|
 | Time | 0.002965 | 0.02474 | 0.02052 | 0.01773 | 0.01643 | 0.01566 | 0.015 | 0.01497 |
+#
+### Weak scaling regola del Trapezio
+
 #
 ### Strong scaling metodo di Monte Carlo
 ![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingMonteCarlo_plot.png)
