@@ -160,7 +160,7 @@ Per effettuare un test di Weak Scaling abbiamo bisogno di aumetare la taglia del
 ### Strong Scaling metodo di Monte Carlo
 Nel grafico sottostante sono presentati i risultati del test dello Stong Scaling per il metodo di Monte Carlo in funzione del tempo in millisecondi e del numero di processori. Per questo test il numero di iterazioni è fissato ad 1E7 (come per lo Strong Scaling del Trapezio) e a variare è il numero di processori impiegati ogni volta nella computazione.
 Si nota come all'aumentare del numero di processori il tempo di esecuzione cala.
-![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/imgs/strongScalingTrapezio_plot.png)
+![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/imgs/strongScalingMonteCarlo_plot.png)
 
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
