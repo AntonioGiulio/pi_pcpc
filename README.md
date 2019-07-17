@@ -6,7 +6,7 @@
 #### Studente: Antonio Giulio 0522500732
 #
 ### Problem statement
-Calcolare il valore approssimato del π sfruttando il calcolo parallelo, sviluppando un programma in C utilizzando MPI. Lo scopo principale è quello di comparare due soluzione del calcolo del π fornite tramite la regola del Trapezio e tramite il metodo di Monte Carlo.  Verranno analizzati singolarmente i due metodi per poi confrontare le soluzioni. 
+Calcolare il valore approssimato del π sfruttando il calcolo parallelo, sviluppando un programma in C utilizzando MPI. Lo scopo principale è quello di comparare due soluzioni del calcolo del π fornite tramite la regola del Trapezio e tramite il metodo di Monte Carlo.  Verranno analizzati singolarmente i due metodi per poi confrontare le soluzioni. 
 #
 ### Strumenti utilizzati
 
@@ -59,7 +59,7 @@ Successivamente ogni processo invoca la funzione trapezio passando come parametr
  }
  ```
  ```c
-   local_result = trapezio(helper[0], helper[1];
+   local_result = trapezio(helper[0], helper[1]);
  ```
 Dopo aver ottenuto il local result ogni processo lo invia al MASTER tramite la funzione MPI_Reduce fornita da MPI. 
 Ho scelto di utilizzare questa funzione perchè specificando un parametro (in questo caso MPI_SUM) ci consente di sommare automaticamente tutte le variabili local_result evitando ulteriore calcolo al processo MASTER.
@@ -73,7 +73,7 @@ Infine il processo MASTER si occupa di ultimare l'approssimazione del π e stamp
       printf("il valore di pi: %lf\n", pi);
   }
 ```
-Per quanto riguarda la gestione del tempo in entrabe le soluzioni ogni processo calcola quanto tempo intercorre tra l'inizio della computazione e il calcolo del local_resul. Infine tutti inviano il proprio time_elapsed al processo MASTER, utilizzando MPI_Reduce, che stamperà il tempo di esecuzione peggiore.
+Per quanto riguarda la gestione del tempo in entrambe le soluzioni ogni processo calcola quanto tempo intercorre tra l'inizio della computazione e il calcolo del local_resul. Infine tutti inviano il proprio time_elapsed al processo MASTER, utilizzando MPI_Reduce (con il parametro MPI_MAX), che stamperà il tempo di esecuzione peggiore.
 ```c
 MPI_Reduce(&time_elapsed, &worst_time, 1, MPI_DOUBLE, MPI_MAX, MASTER, MPI_COMM_WORLD);
 ```
@@ -142,37 +142,51 @@ La gestione del tempo di esecuzione è stata effettuata come nella precedente so
 ### Confronto delle soluzioni 
 Analizzando i risultati dei test dei due programmi eseguiti in parallelo sul cluster di Amazon possiamo dedurre che l'approssimazione del π è più precisa con la regola del Trapezio che con il metodo di Monte Carlo. Questo succede perchè con il metodo di Monte Carlo andiamo a dividere il numero di iteraizoni totali tra i processori e utilizziamo dei numeri pseudocasuali, nonostante non sia stato utilizzato un seme fisso per la loro generazione, il risultato è meno preciso all'aumentare dei processori coinvolti ripetto al metodo del Trapezio. Infatti utilizzando la regola del trapezio, indipendentemente dal numero dei processori, il valore di π è sempre pari a 3,141593.
 ### Testing 
-I test sono stati effettuati sulle istanze m4.large (2 core) di Amazon Web Services. E' stata testata sia lo Strong Scaling che il Weak Scaling.
+I test sono stati effettuati sulle istanze m4.large (2 core) di Amazon Web Services. E' stato testato sia lo Strong Scaling che il Weak Scaling.
 #### Risorse utilizzate:
   - 8 istanze EC2 m4.large
   - 16 processori ( 2 core per istanza )
-### Strong scaling regola del Trapezio
+### Strong Scaling regola del Trapezio
+Nel grafico sottostante è possibile osservare i risultati della fase di test riguardante lo Strong Scaling per la regola del Trapezio. Il numero delle iterazioni (1E7) rimane invariato mentre a cambiare è il numero di processori impiegati nella computazione in parallelo. 
+Si nota che all'aumentare del numero di processori impiegati nella computazione il tempo di esecuzione scende. 
 ![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingTrapezio_plot.png)
 
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:--------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-----:|:-------:|
 | Time | 0.002965 | 0.02474 | 0.02052 | 0.01773 | 0.01643 | 0.01566 | 0.015 | 0.01497 |
+### Weak Scaling regola del Trapezio
+Per effettuare un test di Weak Scaling abbiamo bisogno di aumetare la taglia dell'input in proporzione al numero di processori utilizzati. Purtroppo non è possibile effettuare questo tipo di test per la regola del Trapezio in quanto il numero di iterazioni per il calcolo del valore del π è fisso e quindi cambiare questo valore comporterebbe la perdita della correttezza dell'algoritmo.
 #
-### Weak scaling regola del Trapezio
-
-#
-### Strong scaling metodo di Monte Carlo
+### Strong Scaling metodo di Monte Carlo
+Nel grafico sottostante sono presentati i risultati del test dello Stong Scaling per il metodo di Monte Carlo in funzione del tempo in millisecondi e del numero di processori. Per questo test il numero di iterazioni è fissato ad 1E7 (come per lo Strong Scaling del Trapezio) e a variare è il numero di processori impiegati ogni volta nella computazione.
+Si nota come all'aumentare del numero di processori il tempo di esecuzione cala.
 ![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingMonteCarlo_plot.png)
 
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | Time | 0.31928 | 0.18108 | 0.12788 | 0.11651 | 0.08161 | 0.07487 | 0.06718 | 0.06509 |
-#
-### Weak scaling metodo di Monte Carlo
+### Weak Scaling metodo di Monte Carlo
+Per il test del Weak Scaling la taglia dell'input cresce in proporzione al numero di processori utilizzati. Nei seguenti grafici vengono mostrati i risultati dei test effettuati con 2000 e 3000 iterazioni per processore.
 ![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/weakScalingMonteCarlo.png)
 #### 2000 iter/proc
 | Iterations | 4000 | 6000 | 8000 | 10000 | 12000 | 14000 | 16000 | 18000 | 20000 | 22000 | 24000 | 26000 | 28000 | 30000 | 32000 |
 |:----------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:------:|
 | Np | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
 | Time | 0.00017 | 0.01099 | 0.01165 | 0.02045 | 0.02164 | 0.03116 | 0.0312 | 0.03142 | 0.03121 | 0.03124 | 0.03122 | 0.03107 | 0.03112 | 0.03216 | 0.0324 |
-#
 #### 3000 iter/proc
 | Iterations | 6000 | 9000 | 12000 | 15000 | 18000 | 21000 | 24000 | 27000 | 30000 | 33000 | 36000 | 39000 | 42000 | 45000 | 48000 |
 |:----------:|:-------:|:------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:--------:|:------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | Np | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
 | Time | 0.00024 | 0.0111 | 0.02093 | 0.02078 | 0.02069 | 0.02114 | 0.02115 | 0.02128 | 0.021428 | 0.0215 | 0.02165 | 0.02152 | 0.02158 | 0.03219 | 0.03228 |
+#
+### Come compilare i programmi
+```bash
+
+
+```
+
+```bash
+
+
+```
+
