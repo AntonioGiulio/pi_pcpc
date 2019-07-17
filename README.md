@@ -149,7 +149,7 @@ I test sono stati effettuati sulle istanze m4.large (2 core) di Amazon Web Servi
 ### Strong Scaling regola del Trapezio
 Nel grafico sottostante è possibile osservare i risultati della fase di test riguardante lo Strong Scaling per la regola del Trapezio. Il numero delle iterazioni (1E7) rimane invariato mentre a cambiare è il numero di processori impiegati nella computazione in parallelo. 
 Si nota che all'aumentare del numero di processori impiegati nella computazione il tempo di esecuzione scende. 
-![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingTrapezio_plot.png)
+![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/imgs/strongScalingTrapezio_plot.png)
 
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:--------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-----:|:-------:|
@@ -160,14 +160,14 @@ Per effettuare un test di Weak Scaling abbiamo bisogno di aumetare la taglia del
 ### Strong Scaling metodo di Monte Carlo
 Nel grafico sottostante sono presentati i risultati del test dello Stong Scaling per il metodo di Monte Carlo in funzione del tempo in millisecondi e del numero di processori. Per questo test il numero di iterazioni è fissato ad 1E7 (come per lo Strong Scaling del Trapezio) e a variare è il numero di processori impiegati ogni volta nella computazione.
 Si nota come all'aumentare del numero di processori il tempo di esecuzione cala.
-![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/strongScalingMonteCarlo_plot.png)
+![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/imgs/strongScalingTrapezio_plot.png)
 
 | Np | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
 |:----:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | Time | 0.31928 | 0.18108 | 0.12788 | 0.11651 | 0.08161 | 0.07487 | 0.06718 | 0.06509 |
 ### Weak Scaling metodo di Monte Carlo
 Per il test del Weak Scaling la taglia dell'input cresce in proporzione al numero di processori utilizzati. Nei seguenti grafici vengono mostrati i risultati dei test effettuati con 2000 e 3000 iterazioni per processore.
-![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/weakScalingMonteCarlo.png)
+![image](https://github.com/AntonioGiulio/pi_pcpc/blob/master/imgs/weakScalingMonteCarlo.png)
 #### 2000 iter/proc
 | Iterations | 4000 | 6000 | 8000 | 10000 | 12000 | 14000 | 16000 | 18000 | 20000 | 22000 | 24000 | 26000 | 28000 | 30000 | 32000 |
 |:----------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:------:|
