@@ -181,12 +181,11 @@ Per il test del Weak Scaling la taglia dell'input cresce in proporzione al numer
 #
 ### Come compilare i programmi
 ```bash
-
-
+  mpicc trapezio.c -o trapezio
+  mpirun -np <num_process> -hostfile <hostfile> trapezio
 ```
-
 ```bash
-
-
+  mpicc monteCarlo.c -o monteCarlo
+  mpirun -np <num_process> -hostfile <hostfile> monteCarlo <num_iter>
 ```
 
